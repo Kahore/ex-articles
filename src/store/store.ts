@@ -5,7 +5,7 @@ import articles from './modules/articles';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  modules: {
-    users, articles,
-  },
+  // modules: {
+  //   users, articles,
+  // },
 });

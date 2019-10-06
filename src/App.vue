@@ -11,8 +11,8 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
   components: {
-    AppHeader: () => import('./components/layout/AppHeader'),
-    AppFooter: () => import('./components/layout/AppFooter'),
+    AppHeader: () => import('./components/layout/AppHeader.vue'),
+    AppFooter: () => import('./components/layout/AppFooter.vue'),
   },
 })
 
