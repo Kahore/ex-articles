@@ -3,7 +3,7 @@ let URL = 'http://localhost:5000/api/articles/';
 if (process.env.NODE_ENV === 'production') {
    URL = '/api/articles/';
 }
-import {Article} from '../store/models';
+import {Article, NewArticle} from '../store/models';
 class ArticlesService {
   public static getArticles(params?: object) {
     return new Promise(async (resolve, reject) => {
@@ -33,9 +33,9 @@ class ArticlesService {
       }
     });
   }
-  public static insertArticle(text: Article) {
+  public static insertArticle(newArt: NewArticle) {
     return axios.post(URL, {
-      text,
+      newArt,
     });
   }
   public static updateArticle(articleInfo: Article) {

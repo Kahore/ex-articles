@@ -1,6 +1,6 @@
 import { VuexModule, Module, getModule, Mutation, Action} from 'vuex-module-decorators';
 import store from '../store';
-import { Article } from '../models';
+import { Article, NewArticle } from '../models';
 import articlesService from '../../service/articles';
 
 @Module({
@@ -22,6 +22,10 @@ class ArticlesModule extends VuexModule {
   public setProfileFeed(articles: Article[]) {
     this.profilesArticle = articles;
   }
+  @Mutation
+  public addNewArticle(article: Article) {
+    this.profilesArticle.concat(article);
+  }
   @Action({commit: 'setGlobalFeed'})
   public async refreshGlobalFeed() {
     const globalFeed = articlesService.getArticles();
@@ -32,6 +36,12 @@ class ArticlesModule extends VuexModule {
     const profilesArticle = articlesService.getArticles(profileId);
     return profilesArticle;
   }
+  @Action({commit: 'addNewArticle'})
+  public async insertArticle(newArt: NewArticle) {
+    const newArticle = articlesService.insertArticle(newArt);
+    return newArticle;
+  }
+
 }
 
 

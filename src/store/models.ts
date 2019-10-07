@@ -39,3 +39,11 @@ export interface Article {
     author_id: string;
     profile: Profile;
 }
+
+export interface NewArticle {
+    title: string;
+    description: string;
+    body: string;
+    tagList: string[];
+    author_id: string;
+}

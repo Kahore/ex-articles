@@ -47,9 +47,9 @@ import users from '../store/modules/users';
 
 @Component
 export default class Login extends Vue {
-  public email = '';
-  public password = '';
-  public error = '';
+  public email: string = '';
+  public password: string = '';
+  public error: string = '';
 
   public login() {
     users

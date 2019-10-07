@@ -16,8 +16,8 @@ class UserModule extends VuexModule {
   public get username(): string | null {
     return (this.user && this.user.username) || null;
   }
-  public get userId(): string | null {
-    return (this.user && this.user._id) || null;
+  public get userId(): string {
+    return (this.user && this.user._id) || '';
   }
 
   @Mutation
