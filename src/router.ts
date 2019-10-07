@@ -39,7 +39,7 @@ export default new Router({
       component: () => import('./views/Editor.vue'),
     },
     {
-      path: '/profies',
+      path: '/@:id',
       name: 'profies',
       component: () => import('./views/Profies.vue'),
     },

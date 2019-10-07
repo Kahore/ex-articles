@@ -1,7 +1,8 @@
 import { VuexModule, Module, getModule, MutationAction, Mutation, Action} from 'vuex-module-decorators';
 import store from '../store';
-import { User, Profile, UserSubmit } from '../models';
+import { User, Profile, UserSubmit, ProfileRequest } from '../models';
 import authService from '../../service/auth';
+import usersService from '../../service/users';
 @Module({
   dynamic: true,
   namespaced: true,
@@ -15,9 +16,12 @@ class UserModule extends VuexModule {
   public get username(): string | null {
     return (this.user && this.user.username) || null;
   }
+  public get userId(): string | null {
+    return (this.user && this.user._id) || null;
+  }
 
   @Mutation
-  public setlocalAuth(user: User): void {
+  public setLocalAuth(user: User): void {
     this.user = user;
   }
   @Mutation
@@ -25,7 +29,7 @@ class UserModule extends VuexModule {
     this.user = null;
     localStorage.removeItem('user_auth');
   }
-  @Action({commit: 'setlocalAuth'})
+  @Action({commit: 'setLocalAuth'})
   public localAuth() {
     const userLocal: string | null = localStorage.getItem('user_auth');
     if (userLocal !== null) {
@@ -39,6 +43,11 @@ class UserModule extends VuexModule {
     const user = await authService.loginUser(userSubmit);
     localStorage.setItem('user_auth', JSON.stringify(user));
     return { user };
+  }
+  @MutationAction
+  public async loadProfile(payload: ProfileRequest) {
+    const profile = await usersService.loadProfile(payload);
+    return { profile };
   }
 }
 

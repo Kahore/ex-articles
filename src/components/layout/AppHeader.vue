@@ -18,7 +18,7 @@
             </router-link>
           </li>
           <li v-if="username" class="nav-item">
-            <router-link class="nav-link" :to="'/@' + username">
+            <router-link class="nav-link" :to="'/@' + userId">
               {{ username }}
             </router-link>
           </li>
@@ -50,6 +50,9 @@ import users from '../../store/modules/users';
 export default class AppHeader extends Vue {
   get username() {
     return users.username;
+  }
+  get userId() {
+    return users.userId;
   }
   public logout() {
     users.logOut();

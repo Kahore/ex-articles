@@ -6,15 +6,23 @@
         <div class="row">
 
           <div class="col-xs-12 col-md-10 offset-md-1">
-            <img src="http://i.imgur.com/Qr71crq.jpg" class="user-img" />
-            <h4>Eric Simons</h4>
-            <p>
-              Cofounder @GoThinkster, lived in Aol's HQ for a few months, kinda looks like Peeta from the Hunger Games
+            <img :src="profile.image" class="user-img" />
+            <h4>{{profile.username}}</h4>
+            <p v-if="profile.bio">
+              {{ profile.bio}}
             </p>
-            <button class="btn btn-sm btn-outline-secondary action-btn">
+            <button
+              v-if="userId !== profile._id"
+              class="btn btn-sm btn-outline-secondary action-btn">
               <i class="ion-plus-round"></i>
               &nbsp;
-              Follow Eric Simons 
+              <template v-if="profile.follow">
+                Unfollow
+              </template>
+              <template v-else>
+                Follow
+              </template> 
+              {{profile.username}}
             </button>
           </div>
 
@@ -87,13 +95,22 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-
-export default Vue.extend({
-
-});
+import { Vue, Component } from 'vue-property-decorator';
+import users from '@/store/modules/users';
+@Component
+export default class Profile extends Vue {
+  public created() {
+    const payload = {
+      profileId: this.$route.params.id,
+      userId: this.userId,
+    };
+    users.loadProfile(payload);
+  }
+  get profile() {
+    return users.profile;
+  }
+  get userId() {
+    return users.userId;
+  }
+}
 </script>
-
-<style scoped>
-
-</style>

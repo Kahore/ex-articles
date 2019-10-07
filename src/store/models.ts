@@ -11,14 +11,18 @@ export interface Profile {
     image?: string;
     following: boolean;
 }
-
+export interface ProfileRequest {
+    profileId: string;
+    userId: string | null;
+}
+export interface FollowRelationship {
+    follower_id: string;
+    followed_id: string;
+    following: boolean;
+}
 export interface UserSubmit {
   email: string;
   password: string;
-}
-
-export interface ProfileResponse {
-  profile: Profile;
 }
 
 export interface Article {
