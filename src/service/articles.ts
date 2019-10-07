@@ -1,5 +1,8 @@
 import axios from 'axios';
 const URL = 'http://localhost:5000/api/articles/';
+// if(process.env.NODE_ENV === 'production') {
+//    URL = '/api/articles/';
+// }
 import {Article} from '../store/models';
 class ArticlesService {
   public static getArticles(params?: object) {

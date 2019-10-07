@@ -1,24 +1,40 @@
 <template>
      <nav class="navbar navbar-light">
       <div class="container">
-        <a class="navbar-brand" href="index.html">conduit</a>
+        <a class="navbar-brand" href="/">conduit</a>
         <ul class="nav navbar-nav pull-xs-right">
           <li class="nav-item">
             <!-- Add "active" class when you're on that page" -->
-            <a class="nav-link active" href="">Home</a>
+            <a class="nav-link active" href="/">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="">
-              <i class="ion-compose"></i>&nbsp;New Post
-            </a>
+          <li v-if="username" class="nav-item">
+            <router-link class="nav-link" to="/editor">
+              <i class="ion-compose"></i>&nbsp;New Article
+            </router-link>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="">
+          <li v-if="username" class="nav-item">
+            <router-link class="nav-link" to="/settings">
               <i class="ion-gear-a"></i>&nbsp;Settings
+            </router-link>
+          </li>
+          <li v-if="username" class="nav-item">
+            <router-link class="nav-link" :to="'/@' + username">
+              {{ username }}
+            </router-link>
+          </li>
+           <li v-if="username" class="nav-item" >
+            <a
+              href=""
+              class="nav-link"
+              @click.prevent="logout">
+                <i class="ion-gear-a"></i>&nbsp;Log out
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="">Sign up</a>
+          <li v-if="!username" class="nav-item">
+            <router-link class="nav-link" to="/register"> Sign up </router-link>
+          </li>
+          <li v-if="!username" class="nav-item">
+            <router-link class="nav-link" to="/login"> Sign in </router-link>
           </li>
         </ul>
       </div>
@@ -26,13 +42,18 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Vue, Component } from 'vue-property-decorator';
+import users from '../../store/modules/users';
 
-export default Vue.extend({
 
-});
+@Component
+export default class AppHeader extends Vue {
+  get username() {
+    return users.username;
+  }
+  public logout() {
+    users.logOut();
+    this.$router.push('/');
+  }
+}
 </script>
-
-<style scoped>
-
-</style>

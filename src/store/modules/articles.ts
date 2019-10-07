@@ -6,7 +6,7 @@ import articlesService from '../../service/articles';
 @Module({
   dynamic: true,
   namespaced: true,
-  name: 'users',
+  name: 'articles',
   store,
 })
 class ArticlesModule extends VuexModule {

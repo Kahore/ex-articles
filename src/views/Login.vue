@@ -9,21 +9,28 @@
             <a href="">Have an account?</a>
           </p>
 
-          <ul class="error-messages">
+          <ul class="error-messages" v-if="error">
             <li>That email is already taken</li>
           </ul>
 
           <form>
             <fieldset class="form-group">
-              <input class="form-control form-control-lg" type="text" placeholder="Your Name">
+              <input
+                class="form-control form-control-lg"
+                type="text"
+                placeholder="Email"
+                v-model="email">
             </fieldset>
             <fieldset class="form-group">
-              <input class="form-control form-control-lg" type="text" placeholder="Email">
+              <input
+                class="form-control form-control-lg" 
+                type="password"
+                placeholder="Password"
+                v-model="password">
             </fieldset>
-            <fieldset class="form-group">
-              <input class="form-control form-control-lg" type="password" placeholder="Password">
-            </fieldset>
-            <button class="btn btn-lg btn-primary pull-xs-right">
+            <button
+              class="btn btn-lg btn-primary pull-xs-right"
+              @click.prevent="login">
               Sign up
             </button>
           </form>
@@ -35,12 +42,29 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Vue, Component } from 'vue-property-decorator';
+import users from '../store/modules/users';
 
-export default Vue.extend({
+@Component
+export default class Login extends Vue {
+  public email = '';
+  public password = '';
+  public error = '';
 
-});
+  public login() {
+    users
+    .login({
+      email: this.email,
+      password: this.password,
+    })
+    .then(() => this.$router.push('/'))
+    .catch((err) => {
+      this.error = 'Invalid username or password';
+    });
+  }
+}
 </script>
+
 
 <style scoped>
 
