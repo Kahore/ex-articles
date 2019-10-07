@@ -6,6 +6,7 @@ export interface User {
     image?: string;
 }
 export interface Profile {
+    _id: string;
     username: string;
     bio?: string;
     image?: string;

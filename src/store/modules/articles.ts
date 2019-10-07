@@ -12,15 +12,25 @@ import articlesService from '../../service/articles';
 class ArticlesModule extends VuexModule {
   public globalFeed: Article[] = [];
   public userFeed: Article[] = [];
+  public profilesArticle: Article[] = [];
 
   @Mutation
   public setGlobalFeed(articles: Article[]) {
     this.globalFeed = articles;
   }
+  @Mutation
+  public setProfileFeed(articles: Article[]) {
+    this.profilesArticle = articles;
+  }
   @Action({commit: 'setGlobalFeed'})
   public async refreshGlobalFeed() {
     const globalFeed = articlesService.getArticles();
     return globalFeed;
+  }
+  @Action({commit: 'setProfileFeed'})
+  public async loadProfileArticle(profileId: object) {
+    const profilesArticle = articlesService.getArticles(profileId);
+    return profilesArticle;
   }
 }
 
