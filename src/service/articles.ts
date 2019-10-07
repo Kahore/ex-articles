@@ -20,14 +20,19 @@ class ArticlesService {
             },
           });
         }
-        const data = res.data;
-        resolve(
-          data.map((article: Article) => ({
+        let data = res.data;
+        if (typeof data[0] === 'undefined') {
+            data = { ...data, createdAt: new Date(data.createdAt), updatedAt: new Date(data.updatedAt),
+          };
+          } else {
+            data.map((article: Article) => ({
             ...article,
             createdAt: new Date(article.createdAt),
             updatedAt: new Date(article.updatedAt),
-          })),
-        );
+          }));
+          }
+
+        resolve( data );
       } catch (error) {
         reject(error);
       }

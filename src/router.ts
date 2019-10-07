@@ -29,7 +29,7 @@ export default new Router({
       component: () => import('./views/Register.vue'),
     },
     {
-      path: '/article',
+      path: '/article/:articleId',
       name: 'article',
       component: () => import('./views/Article.vue'),
     },

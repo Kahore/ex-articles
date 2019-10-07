@@ -37,7 +37,7 @@ export interface Article {
     favorited: boolean;
     favoritesCount: number;
     author_id: string;
-    profile: Profile;
+    author: Profile;
 }
 
 export interface NewArticle {

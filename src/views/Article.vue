@@ -1,27 +1,29 @@
 <template>
-  <div class="article-page">
+  <div
+    class="article-page"
+    :class="{ 'article-page--loading': isLoading }">
 
     <div class="banner">
       <div class="container">
 
-        <h1>How to build webapps that scale</h1>
+        <h1>{{ article.title }}</h1>
 
         <div class="article-meta">
           <a href=""><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
           <div class="info">
-            <a href="" class="author">Eric Simons</a>
+            <a href="" class="author">{{ article.author.username }}</a>
             <span class="date">January 20th</span>
           </div>
           <button class="btn btn-sm btn-outline-secondary">
             <i class="ion-plus-round"></i>
             &nbsp;
-            Follow Eric Simons <span class="counter">(10)</span>
+            Follow {{ article.author.username }}
           </button>
           &nbsp;&nbsp;
           <button class="btn btn-sm btn-outline-primary">
             <i class="ion-heart"></i>
             &nbsp;
-            Favorite Post <span class="counter">(29)</span>
+            Favorite Post <span class="counter">{{ article.author.favoritesCount }}</span>
           </button>
         </div>
 
@@ -33,36 +35,13 @@
       <div class="row article-content">
         <div class="col-md-12">
           <p>
-          Web development technologies have evolved at an incredible clip over the past few years.
+          {{ article.description }}
           </p>
-          <h2 id="introducing-ionic">Introducing RealWorld.</h2>
-          <p>It's a great solution for learning how other frameworks work.</p>
+          {{ article.body }}
         </div>
       </div>
 
       <hr />
-
-      <div class="article-actions">
-        <div class="article-meta">
-          <a href="profile.html"><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
-          <div class="info">
-            <a href="" class="author">Eric Simons</a>
-            <span class="date">January 20th</span>
-          </div>
-
-          <button class="btn btn-sm btn-outline-secondary">
-            <i class="ion-plus-round"></i>
-            &nbsp;
-            Follow Eric Simons <span class="counter">(10)</span>
-          </button>
-          &nbsp;
-          <button class="btn btn-sm btn-outline-primary">
-            <i class="ion-heart"></i>
-            &nbsp;
-            Favorite Post <span class="counter">(29)</span>
-          </button>
-        </div>
-      </div>
 
       <div class="row">
 
@@ -122,13 +101,45 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Component, Vue } from 'vue-property-decorator';
+import articles from '../store/modules/articles';
+import { Article } from '../store/models';
+@Component
+export default class ArticlePage extends Vue {
+  public article: Article = {
+    _id: '',
+    title: '',
+    description: '',
+    body: '',
+    tagList: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    favorited: false,
+    favoritesCount: 0,
+    author_id:  '',
+    author: {
+      _id:  '',
+      username:  '',
+      bio:  '',
+      image:  '',
+      following: false,
+    },
+  };
+  private isLoading: boolean = false;
 
-export default Vue.extend({
-
-});
+  public created() {
+    this.isLoading = true;
+    const params = {_id: this.$route.params.articleId};
+    articles.loadSingleArticle(params).then(() => {
+      this.article = articles.singleArticle;
+      this.isLoading = false;
+    });
+  }
+}
 </script>
 
 <style scoped>
-
+.article-page--loading {
+  opacity: 0.1;
+}
 </style>
