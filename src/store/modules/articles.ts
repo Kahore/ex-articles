@@ -31,6 +31,7 @@ class ArticlesModule extends VuexModule {
       image:  '',
       following: false,
     },
+    comments: [],
   };
   // public singleArticle: Article = {};
 

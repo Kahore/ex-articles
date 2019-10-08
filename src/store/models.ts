@@ -42,8 +42,15 @@ export interface Article {
     favoritesCount: number;
     author_id: string;
     author: Profile;
+    comments: Comment[];
 }
-
+export interface Comment {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    body: string;
+    author: Profile;
+}
 export interface NewArticle {
     title: string;
     description: string;

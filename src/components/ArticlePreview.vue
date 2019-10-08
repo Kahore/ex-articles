@@ -28,7 +28,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Article } from '../store/models';
 @Component
-export default class HelloWorld extends Vue {
+export default class ArticlePreview extends Vue {
   @Prop() public article?: Article;
 }
 </script>

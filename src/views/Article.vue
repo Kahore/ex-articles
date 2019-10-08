@@ -9,12 +9,16 @@
         <h1>{{ article.title }}</h1>
 
         <div class="article-meta">
-          <a href=""><img src="http://i.imgur.com/Qr71crq.jpg" /></a>
+          <a href=""><img :src="article.author.image" /></a>
           <div class="info">
-            <a href="" class="author">{{ article.author.username }}</a>
+          <router-link :to="'/@'+article.author._id">
+            {{ article.author.username }}
+          </router-link>
             <span class="date">January 20th</span>
           </div>
-          <button class="btn btn-sm btn-outline-secondary">
+          <button
+            v-if="!isMyProfile"
+            class="btn btn-sm btn-outline-secondary">
             <i class="ion-plus-round"></i>
             &nbsp;
             Follow {{ article.author.username }}
@@ -52,44 +56,17 @@
               <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
             </div>
             <div class="card-footer">
-              <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
+              <img :src="article.author.image" class="comment-author-img" />
               <button class="btn btn-sm btn-primary">
               Post Comment
               </button>
             </div>
           </form>
           
-          <div class="card">
-            <div class="card-block">
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            </div>
-            <div class="card-footer">
-              <a href="" class="comment-author">
-                <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-              </a>
-              &nbsp;
-              <a href="" class="comment-author">Jacob Schmidt</a>
-              <span class="date-posted">Dec 29th</span>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-block">
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            </div>
-            <div class="card-footer">
-              <a href="" class="comment-author">
-                <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-              </a>
-              &nbsp;
-              <a href="" class="comment-author">Jacob Schmidt</a>
-              <span class="date-posted">Dec 29th</span>
-              <span class="mod-options">
-                <i class="ion-edit"></i>
-                <i class="ion-trash-a"></i>
-              </span>
-            </div>
-          </div>
+          <ArticleComment
+          v-for="comment in article.comments"
+          :key="comment._id"
+          :comment="comment"/>
           
         </div>
 
@@ -103,8 +80,13 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import articles from '../store/modules/articles';
+import users from '../store/modules/users';
 import { Article } from '../store/models';
-@Component
+@Component({
+  components : {
+    ArticleComment: () => import('../components/ArticleComment.vue'),
+  },
+})
 export default class ArticlePage extends Vue {
   public article: Article = {
     _id: '',
@@ -124,6 +106,7 @@ export default class ArticlePage extends Vue {
       image:  '',
       following: false,
     },
+    comments: [],
   };
   private isLoading: boolean = false;
 
@@ -134,6 +117,18 @@ export default class ArticlePage extends Vue {
       this.article = articles.singleArticle;
       this.isLoading = false;
     });
+  }
+  get profile() {
+    return users.profile;
+  }
+  get userId() {
+    return users.userId;
+  }
+  get isMyProfile() {
+    if (this.profile && this.userId === this.profile._id) {
+      return true;
+    }
+    return false;
   }
 }
 </script>
