@@ -10,7 +10,14 @@ import usersService from '../../service/users';
   store,
 })
 class UserModule extends VuexModule {
-  public user: User | null = null;
+  // public user: User | null = null;
+  public user: User = {
+    _id: '',
+    bio: '',
+    email: '',
+    image: '',
+    username: '',
+  };
   public profile: Profile | null = null;
 
   public get username(): string | null {
@@ -26,7 +33,13 @@ class UserModule extends VuexModule {
   }
   @Mutation
   public logOut(): void {
-    this.user = null;
+    this.user = {
+      _id: '',
+      bio: '',
+      email: '',
+      image: '',
+      username: '',
+    };
     localStorage.removeItem('user_auth');
   }
   @Action({commit: 'setLocalAuth'})
@@ -47,6 +60,12 @@ class UserModule extends VuexModule {
   @MutationAction
   public async register(newUser: NewUser) {
     const user = await authService.registerUser(newUser);
+    localStorage.setItem('user_auth', JSON.stringify(user));
+    return { user };
+  }
+  @MutationAction
+  public async updateUser(userInfo: User) {
+    const user = await usersService.updateUserInfo(userInfo);
     localStorage.setItem('user_auth', JSON.stringify(user));
     return { user };
   }

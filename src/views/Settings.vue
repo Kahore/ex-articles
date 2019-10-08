@@ -36,7 +36,10 @@
                 <fieldset class="form-group">
                   <input class="form-control form-control-lg" type="password" placeholder="Password">
                 </fieldset>
-                <button class="btn btn-lg btn-primary pull-xs-right">
+                <button
+                  class="btn btn-lg btn-primary pull-xs-right"
+                  :disabled="isLoading"
+                  @click.prevent="updateSettings">
                   Update Settings
                 </button>
             </fieldset>
@@ -54,9 +57,25 @@ import { User } from '../store/models';
 import users from '../store/modules/users';
 @Component
 export default class Settings extends Vue {
-  public user: Partial<User> = {};
+  public user: User  = {
+    _id: '',
+     email: '',
+     username: '',
+     bio: '',
+     image: '',
+  };
+  private isLoading: boolean = false;
+  /**
+   * updateSettings
+   */
+  public updateSettings() {
+    this.isLoading = true;
+    users.updateUser(this.user).then(() => {
+      this.isLoading = false;
+    });
+  }
   public created() {
-    this.user = users.user || {};
+    this.user = users.user;
   }
 }
 </script>
