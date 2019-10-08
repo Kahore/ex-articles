@@ -1,6 +1,6 @@
 import { VuexModule, Module, getModule, MutationAction, Mutation, Action} from 'vuex-module-decorators';
 import store from '../store';
-import { User, Profile, UserSubmit, ProfileRequest } from '../models';
+import { User, Profile, UserSubmit, ProfileRequest, NewUser } from '../models';
 import authService from '../../service/auth';
 import usersService from '../../service/users';
 @Module({
@@ -41,6 +41,12 @@ class UserModule extends VuexModule {
   @MutationAction
   public async login(userSubmit: UserSubmit) {
     const user = await authService.loginUser(userSubmit);
+    localStorage.setItem('user_auth', JSON.stringify(user));
+    return { user };
+  }
+  @MutationAction
+  public async register(newUser: NewUser) {
+    const user = await authService.registerUser(newUser);
     localStorage.setItem('user_auth', JSON.stringify(user));
     return { user };
   }

@@ -25,7 +25,11 @@ export interface UserSubmit {
   email: string;
   password: string;
 }
-
+export interface NewUser {
+  username: string;
+  email: string;
+  password: string;
+}
 export interface Article {
     _id: string;
     title: string;
