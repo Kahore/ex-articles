@@ -5,37 +5,34 @@ if (process.env.NODE_ENV === 'production') {
 }
 import {Article, NewArticle} from '../store/models';
 class ArticlesService {
-  public static getArticles(params?: object) {
-    return new Promise(async (resolve, reject) => {
-      const filter = typeof params === 'undefined' ? '' : params;
-      try {
-        let res;
-        if (typeof params === 'undefined') {
-          res = await axios.get(URL);
-        } else {
-          res = await axios.get(URL, {
-            params: {
-              filter,
-            },
-          });
-        }
-        let data = res.data.articles;
-        if ( res.data.articlesCount  === 1) {
-            data = { ...data[0], createdAt: new Date(data[0].createdAt), updatedAt: new Date(data[0].updatedAt) };
-          } else {
-            data.map((article: Article) => ({
-            ...article,
-            createdAt: new Date(article.createdAt),
-            updatedAt: new Date(article.updatedAt),
-          }));
-          }
-
-        resolve( data );
-      } catch (error) {
-        reject(error);
-      }
-    });
+  public static async getArticles(params?: object): Promise<Article[]>  {
+    try {
+      const data: Article[] = await this.getArticlesData(params) as Article[];
+      data.map((article: Article) => ({
+        ...article,
+        createdAt: new Date(article.createdAt),
+        updatedAt: new Date(article.updatedAt),
+      }));
+      return data;
+    } catch (error) {
+      return error;
+    }
   }
+  public static async getSingleArticle(params?: object): Promise<Article> {
+    try {
+      const data = await this.getArticlesData(params) as Article[];
+      let singleData = data[0] as Article;
+      singleData = {
+        ...singleData,
+        createdAt: new Date(singleData.createdAt),
+        updatedAt: new Date(singleData.updatedAt),
+      };
+      return singleData;
+    } catch (error) {
+      return error;
+    }
+  }
+
   public static insertArticle(newArt: NewArticle) {
     return axios.post(URL, {
       newArt,
@@ -48,6 +45,29 @@ class ArticlesService {
   }
   public static deleteArticle(id: string) {
     return axios.delete(`${URL}${id}`);
+  }
+  private static getArticlesData(params?: object) {
+    return new Promise(async (resolve, reject): Promise<Article[]> => {
+      const filter = typeof params === 'undefined' ? '' : params;
+      try {
+        let res;
+        if (typeof params === 'undefined') {
+          res = await axios.get(URL);
+        } else {
+          res = await axios.get(URL, {
+            params: {
+              filter,
+            },
+          });
+        }
+        const data = res.data.articles;
+        resolve( data );
+        return data;
+      } catch (error) {
+        reject(error);
+      }
+      throw new Error('Shouldn\'t be reachable');
+    });
   }
 }
 export default ArticlesService;

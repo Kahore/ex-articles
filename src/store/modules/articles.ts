@@ -67,7 +67,7 @@ class ArticlesModule extends VuexModule {
 
   @MutationAction
   public async loadSingleArticle(articleId: object) {
-    const singleArticle = await articlesService.getArticles(articleId);
+    const singleArticle = await articlesService.getSingleArticle(articleId);
     return { singleArticle };
   }
 
