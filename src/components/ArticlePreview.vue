@@ -6,7 +6,7 @@
         <router-link :to="'/@'+article.author._id">
           {{ article.author.username }}
        </router-link>
-        <span class="date">January 20th</span>
+        <span class="date">{{reformat(article.createdAt)}}</span>
       </div>
       <button class="btn btn-outline-primary btn-sm pull-xs-right">
         <i class="ion-heart"></i> {{ article.favoritesCount }}
@@ -27,7 +27,10 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Article } from '../store/models';
-@Component
+import dateReformater from '@/mixins/dateReformater';
+@Component({
+  mixins: [dateReformater],
+})
 export default class ArticlePreview extends Vue {
   @Prop() public article?: Article;
 }

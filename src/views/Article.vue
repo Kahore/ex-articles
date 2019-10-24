@@ -14,7 +14,7 @@
           <router-link :to="'/@'+article.author._id">
             {{ article.author.username }}
           </router-link>
-            <span class="date">January 20th</span>
+            <span class="date">{{reformat(article.createdAt)}}</span>
           </div>
           <button
             v-if="!isMyProfile"
@@ -82,7 +82,9 @@ import { Component, Vue } from 'vue-property-decorator';
 import articles from '../store/modules/articles';
 import users from '../store/modules/users';
 import { Article } from '../store/models';
+import dateReformater from '@/mixins/dateReformater';
 @Component({
+  mixins: [dateReformater],
   components : {
     ArticleComment: () => import('../components/ArticleComment.vue'),
   },
