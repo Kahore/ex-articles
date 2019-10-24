@@ -45,12 +45,12 @@ class ArticlesModule extends VuexModule {
   }
   @Mutation
   public addNewArticle(article: Article) {
-    this.globalFeed.concat(article);
+    this.globalFeed.unshift(article);
   }
 
   @Action({commit: 'setGlobalFeed'})
-  public async refreshGlobalFeed() {
-    const globalFeed = articlesService.getArticles();
+  public async refreshGlobalFeed(filter?: object) {
+    const globalFeed = articlesService.getArticles(filter);
     return globalFeed;
   }
   @Action({commit: 'setProfileFeed'})

@@ -36,15 +36,14 @@
           <div class="sidebar">
             <p>Popular Tags</p>
 
-            <div class="tag-list">
-              <a href="" class="tag-pill tag-default">programming</a>
-              <a href="" class="tag-pill tag-default">javascript</a>
-              <a href="" class="tag-pill tag-default">emberjs</a>
-              <a href="" class="tag-pill tag-default">angularjs</a>
-              <a href="" class="tag-pill tag-default">react</a>
-              <a href="" class="tag-pill tag-default">mean</a>
-              <a href="" class="tag-pill tag-default">node</a>
-              <a href="" class="tag-pill tag-default">rails</a>
+            <div class="tag-list"> 
+              <a
+                href=""
+                class="tag-pill tag-default"
+                v-for="(tag, index) in tags"
+                :key="index"
+                @click.prevent="filterArticleByTag(tag)">{{tag}}
+              </a>
             </div>
           </div>
         </div>
@@ -59,6 +58,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import articles from '../store/modules/articles';
+import tags from '../store/modules/tags';
 import { Article } from '../store/models';
 @Component({
   components: {
@@ -67,9 +67,23 @@ import { Article } from '../store/models';
 })
 export default class Home extends Vue {
   public feed: Article[] = [];
+  public tags: string[] = [];
 
   public created() {
-    articles.refreshGlobalFeed().then(() => {
+    this.setArticle();
+    tags.getTags().then(() => {
+     this.tags = tags.tagList;
+    });
+  }
+  /**
+   * filterArticleByTag
+   */
+  public filterArticleByTag(tag: string) {
+    this.setArticle(tag);
+  }
+  private setArticle(filter?: string): void {
+    const tagFilter = {tag: filter};
+    articles.refreshGlobalFeed(tagFilter).then(() => {
       this.feed = articles.globalFeed;
     });
   }

@@ -8,7 +8,6 @@ class ArticlesService {
   public static getArticles(params?: object) {
     return new Promise(async (resolve, reject) => {
       const filter = typeof params === 'undefined' ? '' : params;
-      // console.log('TCL: ArticlesService -> getArticles -> filter', filter);
       try {
         let res;
         if (typeof params === 'undefined') {
@@ -20,10 +19,9 @@ class ArticlesService {
             },
           });
         }
-        let data = res.data;
-        if (typeof data[0] === 'undefined') {
-            data = { ...data, createdAt: new Date(data.createdAt), updatedAt: new Date(data.updatedAt),
-          };
+        let data = res.data.articles;
+        if ( res.data.articlesCount  === 1) {
+            data = { ...data[0], createdAt: new Date(data[0].createdAt), updatedAt: new Date(data[0].updatedAt) };
           } else {
             data.map((article: Article) => ({
             ...article,
@@ -49,7 +47,6 @@ class ArticlesService {
     });
   }
   public static deleteArticle(id: string) {
-    // console.log('TCL: deleteArticle -> deleteSong -> id', id);
     return axios.delete(`${URL}${id}`);
   }
 }
