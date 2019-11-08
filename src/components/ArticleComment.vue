@@ -11,7 +11,7 @@
           <router-link :to="'/@'+comment.author._id">
             {{ comment.author.username }}
           </router-link>
-      <span class="date-posted">{{comment.updatedAt}}</span>
+      <span class="date-posted">{{reformat(comment.createdAt)}}</span>
     </div>
   </div>
 </template>
@@ -19,7 +19,10 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Comment } from '../store/models';
-@Component
+import dateReformater from '@/mixins/dateReformater';
+@Component({
+  mixins: [dateReformater],
+})
 export default class ArticleComment extends Vue {
   @Prop() public comment?: Comment;
 }

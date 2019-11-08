@@ -1,6 +1,6 @@
 import { VuexModule, Module, getModule, Mutation, Action, MutationAction} from 'vuex-module-decorators';
 import store from '../store';
-import { Article, NewArticle, Profile } from '../models';
+import { Article, NewArticle, Profile, NewComment, Comment } from '../models';
 import articlesService from '../../service/articles';
 
 @Module({
@@ -13,6 +13,7 @@ class ArticlesModule extends VuexModule {
   public globalFeed: Article[] = [];
   public userFeed: Article[] = [];
   public profilesArticle: Article[] = [];
+  public comments: Comment[] = [];
   public singleArticle: Article = {
     _id: '',
     title: '',
@@ -47,6 +48,10 @@ class ArticlesModule extends VuexModule {
   public addNewArticle(article: Article) {
     this.globalFeed.unshift(article);
   }
+  @Mutation
+  public addNewComment(comment: Comment) {
+    this.comments.unshift(comment);
+  }
 
   @Action({commit: 'setGlobalFeed'})
   public async refreshGlobalFeed(filter?: object) {
@@ -70,7 +75,16 @@ class ArticlesModule extends VuexModule {
     const singleArticle = await articlesService.getSingleArticle(articleId);
     return { singleArticle };
   }
-
+  @Action({commit: 'addNewComment'})
+  public async insertComment(newCom: NewComment) {
+    const newComment = await articlesService.insertComment(newCom);
+    return newComment.data;
+  }
+  @MutationAction
+  public async loadComments(articleId: string) {
+    const comments = await articlesService.loadComments(articleId);
+    return comments.data;
+  }
 }
 
 export default getModule(ArticlesModule);

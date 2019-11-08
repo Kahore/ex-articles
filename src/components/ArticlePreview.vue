@@ -27,9 +27,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Article } from '../store/models';
-import dateReformater from '@/mixins/dateReformater';
+import DateReformater from '@/mixins/DateReformater.vue';
 @Component({
-  mixins: [dateReformater],
+  mixins: [DateReformater],
 })
 export default class ArticlePreview extends Vue {
   @Prop() public article?: Article;

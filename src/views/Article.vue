@@ -53,18 +53,24 @@
 
           <form class="card comment-form">
             <div class="card-block">
-              <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
+              <textarea
+                class="form-control"
+                placeholder="Write a comment..."
+                rows="3"
+                v-model="newCommentBody"></textarea>
             </div>
             <div class="card-footer">
-              <img :src="article.author.image" class="comment-author-img" />
-              <button class="btn btn-sm btn-primary">
+              <img :src="user.image" class="comment-author-img" />
+              <button
+                class="btn btn-sm btn-primary"
+                @click.prevent="commentPost()">
               Post Comment
               </button>
             </div>
           </form>
           
           <ArticleComment
-          v-for="comment in article.comments"
+          v-for="comment in comments"
           :key="comment._id"
           :comment="comment"/>
           
@@ -81,10 +87,10 @@
 import { Component, Vue } from 'vue-property-decorator';
 import articles from '../store/modules/articles';
 import users from '../store/modules/users';
-import { Article } from '../store/models';
-import dateReformater from '@/mixins/dateReformater';
+import { Article, Comment } from '../store/models';
+import DateReformater from '@/mixins/DateReformater.vue';
 @Component({
-  mixins: [dateReformater],
+  mixins: [DateReformater],
   components : {
     ArticleComment: () => import('../components/ArticleComment.vue'),
   },
@@ -110,6 +116,8 @@ export default class ArticlePage extends Vue {
     },
     comments: [],
   };
+  public comments: Comment[] = [];
+  public newCommentBody: string = '';
   private isLoading: boolean = false;
 
   public created() {
@@ -119,9 +127,15 @@ export default class ArticlePage extends Vue {
       this.article = articles.singleArticle;
       this.isLoading = false;
     });
+    articles.loadComments(this.$route.params.articleId).then(() => {
+      this.comments = articles.comments;
+    });
   }
   get profile() {
     return users.profile;
+  }
+  get user() {
+    return users.user;
   }
   get userId() {
     return users.userId;
@@ -131,6 +145,19 @@ export default class ArticlePage extends Vue {
       return true;
     }
     return false;
+  }
+  /**
+   * commentPost
+   */
+  public commentPost() {
+    const data = {
+      body: this.newCommentBody,
+      author_id: this.userId,
+      article_id: this.$route.params.articleId,
+    };
+    articles.insertComment(data).then(() => {
+      this.newCommentBody = '';
+    });
   }
 }
 </script>

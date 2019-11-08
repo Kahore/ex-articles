@@ -1,6 +1,7 @@
+<script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-@Component
+@Component({})
 export default class DateReformater extends Vue {
     private reformat(created: Date): string {
     const date = new Date(created);
@@ -13,3 +14,4 @@ export default class DateReformater extends Vue {
     return  mnth + ' ' + dd + ' ' + yyyy;
   }
 }
+</script>

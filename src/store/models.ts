@@ -58,3 +58,8 @@ export interface NewArticle {
     tagList: string[];
     author_id: string;
 }
+export interface NewComment {
+    body: string;
+    author_id: string;
+    article_id: string;
+}
