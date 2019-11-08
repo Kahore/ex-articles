@@ -63,6 +63,7 @@ export default class Settings extends Vue {
      username: '',
      bio: '',
      image: '',
+     following: [],
   };
   private isLoading: boolean = false;
   /**

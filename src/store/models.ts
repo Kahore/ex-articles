@@ -4,22 +4,23 @@ export interface User {
     username: string;
     bio?: string;
     image?: string;
+    following?: string[];
 }
 export interface Profile {
     _id: string;
     username: string;
     bio?: string;
     image?: string;
-    following: boolean;
+    following?: string[];
 }
 export interface ProfileRequest {
     profileId: string;
     userId: string | null;
 }
-export interface FollowRelationship {
-    follower_id: string;
-    followed_id: string;
-    following: boolean;
+export interface FollowToggler {
+    profileId: string;
+    userId: string;
+    mode: string;
 }
 export interface UserSubmit {
   email: string;

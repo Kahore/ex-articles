@@ -11,19 +11,7 @@
             <p v-if="profile.bio">
               {{ profile.bio}}
             </p>
-            <button
-              v-if="!isMyProfile"
-              class="btn btn-sm btn-outline-secondary action-btn">
-              <i class="ion-plus-round"></i>
-              &nbsp;
-              <template v-if="profile.follow">
-                Unfollow
-              </template>
-              <template v-else>
-                Follow
-              </template> 
-              {{profile.username}}
-            </button>
+          <Follow :profileId="profile._id"/>
           </div>
 
         </div>
@@ -74,6 +62,7 @@ import { Article } from '../store/models';
 @Component({
   components: {
     ArticlePreview: () => import('../components/ArticlePreview.vue'),
+    Follow: () => import('../components/Follow.vue'),
   },
 })
 export default class Profile extends Vue {
@@ -86,6 +75,8 @@ export default class Profile extends Vue {
     users.loadProfile(payload);
     this.articleLoader();
   }
+
+
   private articleLoader() {
     articles.loadProfileArticle({author_id: this.$route.params.id}).then(() => {
       this.profileArticle = articles.profilesArticle;
@@ -93,6 +84,9 @@ export default class Profile extends Vue {
   }
   get profile() {
     return users.profile;
+  }
+  get user() {
+    return users.user;
   }
   get userId() {
     return users.userId;

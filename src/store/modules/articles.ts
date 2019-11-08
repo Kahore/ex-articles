@@ -30,7 +30,7 @@ class ArticlesModule extends VuexModule {
       username:  '',
       bio:  '',
       image:  '',
-      following: false,
+      following: [],
     },
     comments: [],
   };

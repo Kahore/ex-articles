@@ -16,13 +16,7 @@
           </router-link>
             <span class="date">{{reformat(article.createdAt)}}</span>
           </div>
-          <button
-            v-if="!isMyProfile"
-            class="btn btn-sm btn-outline-secondary">
-            <i class="ion-plus-round"></i>
-            &nbsp;
-            Follow {{ article.author.username }}
-          </button>
+          <Follow :profileId="article.author._id"/>
           &nbsp;&nbsp;
           <button class="btn btn-sm btn-outline-primary">
             <i class="ion-heart"></i>
@@ -93,6 +87,7 @@ import DateReformater from '@/mixins/DateReformater.vue';
   mixins: [DateReformater],
   components : {
     ArticleComment: () => import('../components/ArticleComment.vue'),
+    Follow: () => import('../components/Follow.vue'),
   },
 })
 export default class ArticlePage extends Vue {
@@ -112,7 +107,7 @@ export default class ArticlePage extends Vue {
       username:  '',
       bio:  '',
       image:  '',
-      following: false,
+      following: [],
     },
     comments: [],
   };

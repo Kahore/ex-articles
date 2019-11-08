@@ -1,6 +1,6 @@
 import { VuexModule, Module, getModule, MutationAction, Mutation, Action} from 'vuex-module-decorators';
 import store from '../store';
-import { User, Profile, UserSubmit, ProfileRequest, NewUser } from '../models';
+import { User, Profile, UserSubmit, ProfileRequest, NewUser, FollowToggler } from '../models';
 import authService from '../../service/auth';
 import usersService from '../../service/users';
 @Module({
@@ -10,13 +10,13 @@ import usersService from '../../service/users';
   store,
 })
 class UserModule extends VuexModule {
-  // public user: User | null = null;
   public user: User = {
     _id: '',
     bio: '',
     email: '',
     image: '',
     username: '',
+    following: [],
   };
   public profile: Profile | null = null;
 
@@ -39,6 +39,7 @@ class UserModule extends VuexModule {
       email: '',
       image: '',
       username: '',
+      following: [],
     };
     localStorage.removeItem('user_auth');
   }
@@ -73,6 +74,12 @@ class UserModule extends VuexModule {
   public async loadProfile(payload: ProfileRequest) {
     const profile = await usersService.loadProfile(payload);
     return { profile };
+  }
+  @MutationAction
+  public async followToggler(payload: FollowToggler) {
+    const user = await usersService.follow(payload);
+    localStorage.setItem('user_auth', JSON.stringify(user));
+    return { user };
   }
 }
 
