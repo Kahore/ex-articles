@@ -8,9 +8,11 @@
        </router-link>
         <span class="date">{{reformat(article.createdAt)}}</span>
       </div>
-      <button class="btn btn-outline-primary btn-sm pull-xs-right">
-        <i class="ion-heart"></i> {{ article.favoritesCount }}
-      </button>
+      <div class="pull-xs-right">
+        <Favorite
+          :articleId="article._id"
+          :counter="article.favoritesCount"/>
+      </div>
     </div>
     
     <router-link
@@ -30,6 +32,9 @@ import { Article } from '../store/models';
 import DateReformater from '@/mixins/DateReformater.vue';
 @Component({
   mixins: [DateReformater],
+  components : {
+    Favorite: () => import('@/components/Favorite.vue'),
+  },
 })
 export default class ArticlePreview extends Vue {
   @Prop() public article?: Article;

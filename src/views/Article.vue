@@ -18,11 +18,10 @@
           </div>
           <Follow :profileId="article.author._id"/>
           &nbsp;&nbsp;
-          <button class="btn btn-sm btn-outline-primary">
-            <i class="ion-heart"></i>
-            &nbsp;
-            Favorite Post <span class="counter">{{ article.author.favoritesCount }}</span>
-          </button>
+          
+        <Favorite
+          :articleId="article._id"
+          :counter="article.favoritesCount"/>
         </div>
 
       </div>
@@ -83,11 +82,13 @@ import articles from '../store/modules/articles';
 import users from '../store/modules/users';
 import { Article, Comment } from '../store/models';
 import DateReformater from '@/mixins/DateReformater.vue';
+
 @Component({
   mixins: [DateReformater],
   components : {
-    ArticleComment: () => import('../components/ArticleComment.vue'),
-    Follow: () => import('../components/Follow.vue'),
+    ArticleComment: () => import('@/components/ArticleComment.vue'),
+    Follow: () => import('@/components/Follow.vue'),
+    Favorite: () => import('@/components/Favorite.vue'),
   },
 })
 export default class ArticlePage extends Vue {

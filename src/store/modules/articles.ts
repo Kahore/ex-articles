@@ -1,6 +1,6 @@
 import { VuexModule, Module, getModule, Mutation, Action, MutationAction} from 'vuex-module-decorators';
 import store from '../store';
-import { Article, NewArticle, Profile, NewComment, Comment } from '../models';
+import { Article, NewArticle, NewComment, Comment, FavoriteTogglerMutation } from '../models';
 import articlesService from '../../service/articles';
 
 @Module({
@@ -34,16 +34,12 @@ class ArticlesModule extends VuexModule {
     },
     comments: [],
   };
-  // public singleArticle: Article = {};
 
   @Mutation
   public setGlobalFeed(articles: Article[]) {
     this.globalFeed = articles;
   }
-  @Mutation
-  public setProfileFeed(articles: Article[]) {
-    this.profilesArticle = articles;
-  }
+
   @Mutation
   public addNewArticle(article: Article) {
     this.globalFeed.unshift(article);
@@ -52,16 +48,24 @@ class ArticlesModule extends VuexModule {
   public addNewComment(comment: Comment) {
     this.comments.unshift(comment);
   }
+  @Mutation
+  public changeFavoriteCount(mutationData: FavoriteTogglerMutation) {
+    const idx = this.globalFeed.findIndex( ( block ) => {
+      return block._id === mutationData.articleId;
+    });
+    if (mutationData.mode === 'add') {
+      this.singleArticle.favoritesCount = this.singleArticle.favoritesCount + 1;
+      this.globalFeed[idx].favoritesCount = this.globalFeed[idx].favoritesCount + 1;
+    } else {
+      this.singleArticle.favoritesCount = this.singleArticle.favoritesCount - 1;
+      this.globalFeed[idx].favoritesCount = this.globalFeed[idx].favoritesCount - 1;
+    }
+  }
 
   @Action({commit: 'setGlobalFeed'})
   public async refreshGlobalFeed(filter?: object) {
     const globalFeed = articlesService.getArticles(filter);
     return globalFeed;
-  }
-  @Action({commit: 'setProfileFeed'})
-  public async loadProfileArticle(profileId: object) {
-    const profilesArticle = articlesService.getArticles(profileId);
-    return profilesArticle;
   }
 
   @Action({commit: 'addNewArticle'})
@@ -80,6 +84,13 @@ class ArticlesModule extends VuexModule {
     const newComment = await articlesService.insertComment(newCom);
     return newComment.data;
   }
+
+  @MutationAction
+  public async loadProfileArticle(profileId: object) {
+    const globalFeed = await articlesService.getArticles(profileId);
+    return { globalFeed };
+  }
+
   @MutationAction
   public async loadComments(articleId: string) {
     const comments = await articlesService.loadComments(articleId);

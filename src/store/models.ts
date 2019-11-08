@@ -22,6 +22,15 @@ export interface FollowToggler {
     userId: string;
     mode: string;
 }
+export interface FavoriteToggler {
+    articleId: string;
+    userId: string;
+    mode: string;
+}
+export interface FavoriteTogglerMutation {
+    articleId: string;
+    mode: string;
+}
 export interface UserSubmit {
   email: string;
   password: string;

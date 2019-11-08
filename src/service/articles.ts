@@ -3,7 +3,7 @@ let URL = 'http://localhost:5000/api/articles/';
 if (process.env.NODE_ENV === 'production') {
    URL = '/api/articles/';
 }
-import {Article, NewArticle, NewComment} from '../store/models';
+import {Article, NewArticle, NewComment, FavoriteToggler, Profile} from '../store/models';
 class ArticlesService {
   public static async getArticles(params?: object): Promise<Article[]>  {
     try {
@@ -53,6 +53,30 @@ class ArticlesService {
   }
   public static loadComments(id: string) {
     return axios.get(URL + id + '/comments', {});
+  }
+  /**
+   * favorite
+   */
+  public static async favorite(payload: FavoriteToggler) {
+    let response;
+    if (payload.mode === 'add') {
+      response = await this.favoriteAdd(payload);
+    } else {
+      response = await this.favoriteDelete(payload);
+    }
+    return response;
+  }
+  private static async favoriteAdd(payload: FavoriteToggler) {
+    const response =  await axios.post(URL + payload.articleId + '/favorite', {
+      id: payload.userId,
+    });
+    return (response.data as Profile);
+  }
+  private static async favoriteDelete(payload: FavoriteToggler) {
+    const response =  await axios.delete(URL + payload.articleId + '/favorite', {
+      params: { id: payload.userId },
+    });
+    return (response.data as Profile);
   }
   private static getArticlesData(params?: object) {
     return new Promise(async (resolve, reject): Promise<Article[]> => {

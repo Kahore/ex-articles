@@ -20,7 +20,7 @@ import { FollowToggler } from '../store/models';
 @Component
 export default class Follow extends Vue {
  @Prop({required: true, default: ''})
- private profileId: string = '';
+ private profileId!: string;
   get user() {
     return users.user;
   }
@@ -45,7 +45,7 @@ export default class Follow extends Vue {
     users.followToggler(payload);
   }
   /**
-   * followToggler
+   * isFollow
    */
    public isFollow(profileId: string) {
     // TODO: Find a way to fix this

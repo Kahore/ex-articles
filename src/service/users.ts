@@ -38,6 +38,7 @@ class UserService {
     }
     return response;
   }
+
   private static async followAdd(payload: FollowToggler) {
     const response =  await axios.post(URL + payload.profileId + '/follow', {
       id: payload.userId,

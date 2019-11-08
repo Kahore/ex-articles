@@ -79,7 +79,7 @@ export default class Profile extends Vue {
 
   private articleLoader() {
     articles.loadProfileArticle({author_id: this.$route.params.id}).then(() => {
-      this.profileArticle = articles.profilesArticle;
+      this.profileArticle = articles.globalFeed;
     });
   }
   get profile() {

@@ -1,8 +1,9 @@
 import { VuexModule, Module, getModule, MutationAction, Mutation, Action} from 'vuex-module-decorators';
 import store from '../store';
-import { User, Profile, UserSubmit, ProfileRequest, NewUser, FollowToggler } from '../models';
+import { User, Profile, UserSubmit, ProfileRequest, NewUser, FollowToggler, FavoriteToggler } from '../models';
 import authService from '../../service/auth';
 import usersService from '../../service/users';
+import articleService from '../../service/articles';
 @Module({
   dynamic: true,
   namespaced: true,
@@ -78,6 +79,12 @@ class UserModule extends VuexModule {
   @MutationAction
   public async followToggler(payload: FollowToggler) {
     const user = await usersService.follow(payload);
+    localStorage.setItem('user_auth', JSON.stringify(user));
+    return { user };
+  }
+  @MutationAction
+  public async favoriteToggler(payload: FavoriteToggler) {
+    const user = await articleService.favorite(payload);
     localStorage.setItem('user_auth', JSON.stringify(user));
     return { user };
   }
