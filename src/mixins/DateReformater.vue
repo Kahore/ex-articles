@@ -3,7 +3,7 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component({})
 export default class DateReformater extends Vue {
-    private reformat(created: Date): string {
+    public reformat(created: Date): string {
     const date = new Date(created);
     const monthNames =
     ['January', 'February', 'March', 'April', 'May', 'June',

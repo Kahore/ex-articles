@@ -19,9 +19,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Comment } from '../store/models';
-import dateReformater from '@/mixins/dateReformater';
+import DateReformater from '@/mixins/DateReformater.vue';
 @Component({
-  mixins: [dateReformater],
+  mixins: [DateReformater],
 })
 export default class ArticleComment extends Vue {
   @Prop() public comment?: Comment;
