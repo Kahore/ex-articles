@@ -13,6 +13,10 @@ export interface Profile {
     image?: string;
     following?: string[];
 }
+export interface ProfileFilter {
+    author_id: string;
+    favorited?: string;
+}
 export interface ProfileRequest {
     profileId: string;
     userId: string | null;

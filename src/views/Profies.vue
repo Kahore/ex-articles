@@ -25,19 +25,33 @@
         <div class="col-xs-12 col-md-10 offset-md-1">
           <div class="articles-toggle">
             <ul class="nav nav-pills outline-active">
+             
               <li class="nav-item">
-                <a class="nav-link active" href="">
-                  <template v-if="isMyProfile">
-                    My Articles 
-                  </template>
-                  <template v-else>
-                    {{profile.username}}'s Articles 
-                  </template>
-                </a>
+                <keep-alive>
+                  <router-link
+                    class="nav-link"
+                    :class="{'active': currentTab === 'profile'}"
+                    :to="'/@' + profile._id">
+                  <div @click="getProfilesArticle()">
+                    <template v-if="isMyProfile">
+                      My Articles 
+                    </template>
+                    <template v-else>
+                      {{profile.username}}'s Articles 
+                    </template>
+                    </div>
+                  </router-link> 
+                </keep-alive>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="">Favorited Articles</a>
+                <router-link
+                  class="nav-link"
+                  :class="{'active': currentTab === 'favorite'}"
+                  :to="'/@' + profile._id" >
+                <div @click.prevent="getFavoriteArticle()">Favorited Articles</div>
+                </router-link> 
               </li>
+              
             </ul>
           </div>
 
@@ -58,7 +72,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import users from '../store/modules/users';
 import articles from '../store/modules/articles';
-import { Article } from '../store/models';
+import { Article, ProfileFilter } from '../store/models';
 @Component({
   components: {
     ArticlePreview: () => import('../components/ArticlePreview.vue'),
@@ -67,21 +81,35 @@ import { Article } from '../store/models';
 })
 export default class Profile extends Vue {
   public profileArticle: Article[] = [];
+  private currentTab: 'profile' | 'favorite' = 'profile';
   public created() {
     const payload = {
       profileId: this.$route.params.id,
       userId: this.userId,
     };
     users.loadProfile(payload);
-    this.articleLoader();
+    this.getProfilesArticle();
   }
-
-
-  private articleLoader() {
-    articles.loadProfileArticle({author_id: this.$route.params.id}).then(() => {
+  public getProfilesArticle() {
+    this.currentTab = 'profile';
+    const filter: ProfileFilter = { author_id: this.$route.params.id };
+    this.articleLoader(filter);
+  }
+  /**
+   * getFavoriteArticle
+   */
+  public getFavoriteArticle() {
+    this.currentTab = 'favorite';
+    const filter: ProfileFilter = { author_id: this.$route.params.id, favorited: this.user._id };
+    this.articleLoader(filter);
+  }
+  private articleLoader(filter: ProfileFilter) {
+    this.profileArticle = [];
+    articles.loadProfileArticle(filter).then(() => {
       this.profileArticle = articles.globalFeed;
     });
   }
+
   get profile() {
     return users.profile;
   }
