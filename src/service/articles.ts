@@ -3,7 +3,7 @@ let URL = 'http://localhost:5000/api/articles/';
 if (process.env.NODE_ENV === 'production') {
    URL = '/api/articles/';
 }
-import {Article, NewArticle, NewComment, FavoriteToggler, Profile} from '../store/models';
+import {Article, NewArticle, NewComment, FavoriteToggler, Profile, UpdateArticle} from '../store/models';
 class ArticlesService {
   public static async getArticles(params?: object): Promise<Article[]>  {
     try {
@@ -38,8 +38,8 @@ class ArticlesService {
       newArt,
     });
   }
-  public static updateArticle(articleInfo: Article) {
-    return axios.put(URL, {
+  public static updateArticle(articleInfo: UpdateArticle) {
+    return axios.put(URL + articleInfo._id, {
       articleInfo,
     });
   }

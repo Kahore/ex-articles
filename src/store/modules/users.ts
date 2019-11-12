@@ -44,6 +44,10 @@ class UserModule extends VuexModule {
     };
     localStorage.removeItem('user_auth');
   }
+  @Mutation
+  public resetProfile(): void {
+     this.profile = null;
+  }
   @Action({commit: 'setLocalAuth'})
   public localAuth() {
     const userLocal: string | null = localStorage.getItem('user_auth');

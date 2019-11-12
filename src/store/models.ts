@@ -72,6 +72,9 @@ export interface NewArticle {
     tagList: string[];
     author_id: string;
 }
+export interface UpdateArticle extends NewArticle {
+    _id: string;
+}
 export interface NewComment {
     body: string;
     author_id: string;

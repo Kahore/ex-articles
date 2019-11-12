@@ -19,9 +19,17 @@
           <Follow :profileId="article.author._id"/>
           &nbsp;&nbsp;
           
-        <Favorite
-          :articleId="article._id"
-          :counter="article.favoritesCount"/>
+          <Favorite
+            :articleId="article._id"
+            :counter="article.favoritesCount"/>
+
+          &nbsp;&nbsp;
+
+          <router-link
+            v-if="canIEdit"
+            :to="'/editor/'+article._id">
+            <button class="btn btn-sm btn-outline-secondary">Edit</button>
+          </router-link>
         </div>
 
       </div>
@@ -29,14 +37,17 @@
 
     <div class="container page">
 
-      <div class="row article-content">
+      <article class="row article-content">
         <div class="col-md-12">
           <p>
           {{ article.description }}
           </p>
-          {{ article.body }}
+          <p
+            v-for="(line, index) in article.body.split('\n')"
+            :key="index">{{line}}
+          </p>
         </div>
-      </div>
+      </article>
 
       <hr />
 
@@ -83,6 +94,7 @@ import users from '../store/modules/users';
 import { Article, Comment } from '../store/models';
 import DateReformater from '@/mixins/DateReformater.vue';
 
+
 @Component({
   mixins: [DateReformater],
   components : {
@@ -127,17 +139,14 @@ export default class ArticlePage extends Vue {
       this.comments = articles.comments;
     });
   }
-  get profile() {
-    return users.profile;
-  }
   get user() {
     return users.user;
   }
   get userId() {
     return users.userId;
   }
-  get isMyProfile() {
-    if (this.profile && this.userId === this.profile._id) {
+  get canIEdit() {
+    if (this.userId === this.article.author._id) {
       return true;
     }
     return false;

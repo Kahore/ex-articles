@@ -73,7 +73,9 @@ import { Vue, Component } from 'vue-property-decorator';
 import users from '../store/modules/users';
 import articles from '../store/modules/articles';
 import { Article, ProfileFilter } from '../store/models';
+import IsMyProfile from '@/mixins/IsMyProfile.vue';
 @Component({
+  mixins: [IsMyProfile],
   components: {
     ArticlePreview: () => import('../components/ArticlePreview.vue'),
     Follow: () => import('../components/Follow.vue'),
@@ -89,6 +91,12 @@ export default class Profile extends Vue {
     };
     users.loadProfile(payload);
     this.getProfilesArticle();
+  }
+  /**
+   * beforeDestroy
+   */
+  public beforeDestroy() {
+    users.resetProfile();
   }
   public getProfilesArticle() {
     this.currentTab = 'profile';
@@ -119,11 +127,11 @@ export default class Profile extends Vue {
   get userId() {
     return users.userId;
   }
-  get isMyProfile() {
-    if (this.profile && this.userId === this.profile._id) {
-      return true;
-    }
-    return false;
-  }
+  // get isMyProfile() {
+  //   if (this.profile && this.userId === this.profile._id) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 }
 </script>

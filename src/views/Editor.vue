@@ -50,13 +50,25 @@
                       </span>
                     </div>
               </fieldset>
-              <button
-                class="btn btn-lg pull-xs-right btn-primary"
-                type="button"
-                @click.prevent="insertArticle"
-                :disabled="isLoading">
-                  Publish Article
-              </button>
+              <template v-if="$data._id === ''">
+                <button
+                  class="btn btn-lg pull-xs-right btn-primary"
+                  type="button"
+                  @click.prevent="insertArticle"
+                  :disabled="isLoading">
+                
+                    Publish Article
+                </button>
+              </template>
+              <template v-else>
+                <button
+                  class="btn btn-lg pull-xs-right btn-primary"
+                  type="button"
+                  @click.prevent="updateArticle"
+                  :disabled="isLoading">
+                  Amend Article
+                  </button>
+              </template>
             </fieldset>
           </form>
         </div>
@@ -70,9 +82,11 @@
 import { Vue, Component } from 'vue-property-decorator';
 import users from '../store/modules/users';
 import articles from '../store/modules/articles';
-import { NewArticle } from '../store/models';
+import { NewArticle, UpdateArticle } from '../store/models';
 @Component
 export default class Editor extends Vue {
+    // tslint:disable-next-line
+    public _id: string = '';
     public title: string = '';
     public description: string = '';
     public body: string = '';
@@ -81,18 +95,47 @@ export default class Editor extends Vue {
     private error: string = '';
     private isLoading: boolean = false;
     /**
+     * created
+     */
+    public created() {
+      this.loadArticle();
+    }
+    /**
+     * loadArticle
+     */
+    public loadArticle() {
+      if (typeof this.$route.params.articleId !== 'undefined') {
+        const params = {_id: this.$route.params.articleId };
+        articles.loadSingleArticle(params).then(() => {
+            this.$data._id = articles.singleArticle._id;
+            this.title = articles.singleArticle.title;
+            this.description = articles.singleArticle.description;
+            this.body = articles.singleArticle.body;
+            this.tagList = articles.singleArticle.tagList;
+          });
+      }
+    }
+    /**
      * insertArticle
      */
     public insertArticle() {
       this.isLoading = true;
-      const data: NewArticle = {
-        title: this.title,
-        description: this.description,
-        body: this.body,
-        tagList: this.tagList,
-        author_id: this.userId,
-      };
+      const data: NewArticle = this.getArticleData();
       articles.insertArticle(data).then(() => {
+        this.isLoading = false;
+        this.$router.push('/');
+      }).catch((err) => {
+        this.error = err;
+      });
+    }
+    /**
+     * updateArticle
+     */
+    public updateArticle() {
+      this.isLoading = true;
+      const data: NewArticle = this.getArticleData();
+      const dataForUpdate: UpdateArticle  = { _id: this.$data._id, ...data };
+      articles.updateArticle(dataForUpdate).then(() => {
         this.isLoading = false;
         this.$router.push('/');
       }).catch((err) => {
@@ -114,6 +157,16 @@ export default class Editor extends Vue {
     }
     get userId() {
       return users.userId;
+    }
+    private getArticleData(): NewArticle {
+      const data: NewArticle = {
+        title: this.title,
+        description: this.description,
+        body: this.body,
+        tagList: this.tagList,
+        author_id: this.userId,
+      };
+      return data;
     }
 }
 </script>
