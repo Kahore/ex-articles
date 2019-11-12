@@ -14,14 +14,21 @@
           <div class="feed-toggle">
             <ul class="nav nav-pills outline-active">
               <li class="nav-item">
-                <a
-                  class="nav-link disabled"
-                  href="">Your Feed</a>
+                <router-link
+                  v-if="userId"
+                  class="nav-link"
+                  :class="{'active': currentTab === 'user'}"
+                  to="/" >
+                  <div @click.prevent="filterArticleByPersonal()">Your Feed</div>
+                </router-link>
               </li>
               <li class="nav-item">
-                <a
-                  class="nav-link active"
-                  href="">Global Feed</a>
+                <router-link
+                  class="nav-link"
+                  :class="{'active': currentTab === 'global'}"
+                  to="/">
+                  <div @click.prevent="filterArticleByGlobal()">Global Feed</div>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -32,6 +39,11 @@
             :article="article"
             :key="article._id">
           </ArticlePreview>
+        <div class="col-md-11 col-xs-11 offset-md-1">
+          <p v-if="feed.length === 0 && !isLoading" >
+            Look's like there is nothing here to show :(
+          </p>
+        </div>
         </div>
 
         <div class="col-md-3">
@@ -62,6 +74,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import articles from '../store/modules/articles';
 import tags from '../store/modules/tags';
 import { Article } from '../store/models';
+import users from '../store/modules/users';
 @Component({
   components: {
     ArticlePreview: () => import('../components/ArticlePreview.vue'),
@@ -70,7 +83,8 @@ import { Article } from '../store/models';
 export default class Home extends Vue {
   public feed: Article[] = [];
   public tags: string[] = [];
-
+  private currentTab: 'global' | 'user' = 'global';
+  private isLoading: boolean = false;
   public created() {
     this.setArticle();
     tags.getTags().then(() => {
@@ -81,13 +95,34 @@ export default class Home extends Vue {
    * filterArticleByTag
    */
   public filterArticleByTag(tag: string) {
-    this.setArticle(tag);
+    let tagFilter: object = {tag};
+    if ( this.currentTab === 'user' ) {
+      tagFilter = {...tagFilter, userFeed: this.userId};
+    }
+    this.setArticle(tagFilter);
   }
-  private setArticle(filter?: string): void {
-    const tagFilter = {tag: filter};
-    articles.refreshGlobalFeed(tagFilter).then(() => {
+  /**
+   * filterArticleByPersonal
+   */
+  public filterArticleByPersonal() {
+    this.currentTab = 'user';
+    const userFeed = { userFeed: this.userId };
+    this.setArticle(userFeed);
+  }
+  public filterArticleByGlobal() {
+    this.currentTab = 'global';
+    this.setArticle();
+  }
+  private setArticle(filter?: object): void {
+    this.feed = [];
+    this.isLoading = true;
+    articles.refreshGlobalFeed(filter).then(() => {
+      this.isLoading = false;
       this.feed = articles.globalFeed;
     });
+  }
+  get userId() {
+    return users.userId;
   }
 }
 </script>
