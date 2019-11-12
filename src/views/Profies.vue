@@ -6,19 +6,22 @@
         <div class="row">
 
           <div class="col-xs-12 col-md-10 offset-md-1">
-            <img :src="profile.image" class="user-img" />
+            <img
+              :src="profile.image"
+              class="user-img" />
             <h4>{{profile.username}}</h4>
             <p v-if="profile.bio">
               {{ profile.bio}}
             </p>
-          <Follow :profileId="profile._id"/>
+            <Follow :profileId="profile._id"/>
           </div>
 
         </div>
         <!-- .row -->
       </div>
+      <!-- .container -->
     </div>
-
+    <!-- .user-info -->
     <div class="container">
       <div class="row">
 
@@ -51,7 +54,6 @@
                 <div @click.prevent="getFavoriteArticle()">Favorited Articles</div>
                 </router-link> 
               </li>
-              
             </ul>
           </div>
 
@@ -60,12 +62,19 @@
             :article="article"
             :key="article._id">
           </ArticlePreview>
+
         </div>
-
+        <div class="col-md-11 col-xs-11 offset-md-1">
+          <p v-if="profileArticle.length === 0 && !isLoading" >
+            Look's like there is nothing here to show :(
+          </p>
+        </div>
       </div>
+      <!-- .row -->
     </div>
-
+    <!-- .container -->
   </div>
+  <!-- .profile-page -->
 </template>
 
 <script lang="ts">
@@ -84,6 +93,7 @@ import IsMyProfile from '@/mixins/IsMyProfile.vue';
 export default class Profile extends Vue {
   public profileArticle: Article[] = [];
   private currentTab: 'profile' | 'favorite' = 'profile';
+  private isLoading: boolean = false;
   public created() {
     const payload = {
       profileId: this.$route.params.id,
@@ -106,15 +116,18 @@ export default class Profile extends Vue {
   /**
    * getFavoriteArticle
    */
-  public getFavoriteArticle() {
+  public async getFavoriteArticle() {
+    this.isLoading = true;
     this.currentTab = 'favorite';
     const filter: ProfileFilter = { author_id: this.$route.params.id, favorited: this.user._id };
     this.articleLoader(filter);
   }
-  private articleLoader(filter: ProfileFilter) {
+  private async articleLoader(filter: ProfileFilter) {
+    this.isLoading = true;
     this.profileArticle = [];
-    articles.loadProfileArticle(filter).then(() => {
+    await articles.loadProfileArticle(filter).then(() => {
       this.profileArticle = articles.globalFeed;
+      this.isLoading = false;
     });
   }
 

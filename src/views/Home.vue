@@ -3,39 +3,40 @@
 
     <div class="banner">
       <div class="container">
-        <h1 class="logo-font">conduit</h1>
-        <p>A place to share your knowledge.</p>
+        <h1 class="logo-font">Logo name</h1>
+        <p>Some brand phrase here.</p>
       </div>
     </div>
-
+    <!-- .banner -->
     <div class="container page">
       <div class="row">
-
-        <div class="col-md-9">
+        <div class="col-md-9 col-xs-12">
           <div class="feed-toggle">
             <ul class="nav nav-pills outline-active">
               <li class="nav-item">
-                <a class="nav-link disabled" href="">Your Feed</a>
+                <a
+                  class="nav-link disabled"
+                  href="">Your Feed</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="">Global Feed</a>
+                <a
+                  class="nav-link active"
+                  href="">Global Feed</a>
               </li>
             </ul>
           </div>
+          <!-- .feed-toggle -->
 
-        <ArticlePreview
-          v-for="article in feed"
-          :article="article"
-          :key="article._id">
-        </ArticlePreview>
-
-
+          <ArticlePreview
+            v-for="article in feed"
+            :article="article"
+            :key="article._id">
+          </ArticlePreview>
         </div>
 
         <div class="col-md-3">
           <div class="sidebar">
             <p>Popular Tags</p>
-
             <div class="tag-list"> 
               <a
                 href=""
@@ -49,8 +50,9 @@
         </div>
 
       </div>
+      <!-- .row -->
     </div>
-
+    <!-- .container page-->
   </div>
 </template>
 

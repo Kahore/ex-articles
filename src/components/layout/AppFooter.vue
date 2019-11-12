@@ -1,9 +1,14 @@
 <template>
     <footer>
       <div class="container">
-        <a href="/" class="logo-font">conduit</a>
+        <span>2019</span>
         <span class="attribution">
-          An interactive learning project from <a href="https://thinkster.io">Thinkster</a>. Code &amp; design licensed under MIT.
+          <a href="https://www.facebook.com/">Facebook</a>
+          &nbsp;&nbsp;
+          <a href="https://twitter.com/">Twitter</a>
+          &nbsp;&nbsp;
+          <a href="https://www.instagram.com/">Instagram</a>
+          &nbsp;&nbsp;
         </span>
       </div>
     </footer>
