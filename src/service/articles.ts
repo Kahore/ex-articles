@@ -3,7 +3,7 @@ let URL = 'http://localhost:5000/api/articles/';
 if (process.env.NODE_ENV === 'production') {
    URL = '/api/articles/';
 }
-import {Article, NewArticle, NewComment, FavoriteToggler, Profile, UpdateArticle} from '../store/models';
+import {Article, NewArticle, NewComment, FavoriteToggler, Profile, UpdateArticle, DeleteArticle} from '../store/models';
 class ArticlesService {
   public static async getArticles(params?: object): Promise<Article[]>  {
     try {
@@ -43,8 +43,11 @@ class ArticlesService {
       articleInfo,
     });
   }
-  public static deleteArticle(id: string) {
-    return axios.delete(`${URL}${id}`);
+  public static async deleteArticle(delInfo: DeleteArticle) {
+    const response =  await axios.delete(URL + delInfo.articleId, {
+      params: { id: delInfo.userId },
+    });
+    return response.data;
   }
   public static insertComment(newCom: NewComment) {
     return axios.post(URL + newCom.article_id + '/comments', {

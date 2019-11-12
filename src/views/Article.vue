@@ -30,6 +30,11 @@
             :to="'/editor/'+article._id">
             <button class="btn btn-sm btn-outline-secondary">Edit</button>
           </router-link>
+          &nbsp;&nbsp;
+          <button
+            v-if="canIEdit"
+            class="btn btn-sm btn-outline-danger"
+            @click.prevent="deleteArticle">Delete</button>
         </div>
 
       </div>
@@ -91,7 +96,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import articles from '../store/modules/articles';
 import users from '../store/modules/users';
-import { Article, Comment } from '../store/models';
+import { Article, Comment, DeleteArticle } from '../store/models';
 import DateReformater from '@/mixins/DateReformater.vue';
 
 
@@ -137,6 +142,18 @@ export default class ArticlePage extends Vue {
     });
     articles.loadComments(this.$route.params.articleId).then(() => {
       this.comments = articles.comments;
+    });
+  }
+  /**
+   * deleteArticle
+   */
+  public deleteArticle() {
+    const data: DeleteArticle = {
+      articleId: this.article._id,
+      userId: this.userId,
+    };
+    articles.deleteArticle(data).then(() => {
+      this.$router.push('/');
     });
   }
   get user() {

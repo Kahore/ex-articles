@@ -75,6 +75,11 @@ export interface NewArticle {
 export interface UpdateArticle extends NewArticle {
     _id: string;
 }
+
+export interface DeleteArticle {
+    articleId: string;
+    userId: string;
+}
 export interface NewComment {
     body: string;
     author_id: string;

@@ -1,6 +1,6 @@
 import { VuexModule, Module, getModule, Mutation, Action, MutationAction} from 'vuex-module-decorators';
 import store from '../store';
-import { Article, NewArticle, NewComment, Comment, FavoriteTogglerMutation, UpdateArticle } from '../models';
+import { Article, NewArticle, NewComment, Comment, FavoriteTogglerMutation, UpdateArticle, DeleteArticle } from '../models';
 import articlesService from '../../service/articles';
 
 @Module({
@@ -52,6 +52,11 @@ class ArticlesModule extends VuexModule {
     this.globalFeed = this.globalFeed.concat(article);
   }
   @Mutation
+  public removeArticle(delInfo: DeleteArticle) {
+    const index = this.globalFeed.findIndex( (block) => block._id === delInfo.articleId );
+    this.globalFeed.splice(index, 1);
+  }
+  @Mutation
   public addNewComment(comment: Comment) {
     this.comments.unshift(comment);
   }
@@ -84,6 +89,11 @@ class ArticlesModule extends VuexModule {
   public async updateArticle(updArt: UpdateArticle) {
     const updatedArticle = articlesService.updateArticle(updArt);
     return updatedArticle;
+  }
+  @Action({commit: 'removeArticle'})
+  public async deleteArticle(delInfo: DeleteArticle) {
+    articlesService.deleteArticle(delInfo);
+    return delInfo;
   }
 
   @MutationAction
