@@ -1,6 +1,5 @@
 <template>
   <div class="home-page">
-
     <div class="banner">
       <div class="container">
         <h1 class="logo-font">Logo name</h1>
@@ -17,17 +16,23 @@
                 <router-link
                   v-if="userId"
                   class="nav-link"
-                  :class="{'active': currentTab === 'user'}"
-                  to="/" >
-                  <div @click.prevent="filterArticleByPersonal()">Your Feed</div>
+                  :class="{ active: currentTab === 'user' }"
+                  to="/"
+                >
+                  <div @click.prevent="filterArticleByPersonal()">
+                    Your Feed
+                  </div>
                 </router-link>
               </li>
               <li class="nav-item">
                 <router-link
                   class="nav-link"
-                  :class="{'active': currentTab === 'global'}"
-                  to="/">
-                  <div @click.prevent="filterArticleByGlobal()">Global Feed</div>
+                  :class="{ active: currentTab === 'global' }"
+                  to="/"
+                >
+                  <div @click.prevent="filterArticleByGlobal()">
+                    Global Feed
+                  </div>
                 </router-link>
               </li>
             </ul>
@@ -37,30 +42,31 @@
           <ArticlePreview
             v-for="article in feed"
             :article="article"
-            :key="article._id">
+            :key="article._id"
+          >
           </ArticlePreview>
-        <div class="col-md-11 col-xs-11 offset-md-1">
-          <p v-if="feed.length === 0 && !isLoading" >
-            Look's like there is nothing here to show :(
-          </p>
-        </div>
+          <div class="col-md-11 col-xs-11 offset-md-1">
+            <p v-if="feed.length === 0 && !isLoading">
+              Look's like there is nothing here to show :(
+            </p>
+          </div>
         </div>
 
         <div class="col-md-3">
           <div class="sidebar">
             <p>Popular Tags</p>
-            <div class="tag-list"> 
+            <div class="tag-list">
               <a
                 href=""
                 class="tag-pill tag-default"
                 v-for="(tag, index) in tags"
                 :key="index"
-                @click.prevent="filterArticleByTag(tag)">{{tag}}
+                @click.prevent="filterArticleByTag(tag)"
+                >{{ tag }}
               </a>
             </div>
           </div>
         </div>
-
       </div>
       <!-- .row -->
     </div>
@@ -88,16 +94,16 @@ export default class Home extends Vue {
   public created() {
     this.setArticle();
     tags.getTags().then(() => {
-     this.tags = tags.tagList;
+      this.tags = tags.tagList;
     });
   }
   /**
    * filterArticleByTag
    */
   public filterArticleByTag(tag: string) {
-    let tagFilter: object = {tag};
-    if ( this.currentTab === 'user' ) {
-      tagFilter = {...tagFilter, userFeed: this.userId};
+    let tagFilter: object = { tag };
+    if (this.currentTab === 'user') {
+      tagFilter = { ...tagFilter, userFeed: this.userId };
     }
     this.setArticle(tagFilter);
   }

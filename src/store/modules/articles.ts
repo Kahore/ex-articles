@@ -1,6 +1,21 @@
-import { VuexModule, Module, getModule, Mutation, Action, MutationAction} from 'vuex-module-decorators';
+import {
+  VuexModule,
+  Module,
+  getModule,
+  Mutation,
+  Action,
+  MutationAction,
+} from 'vuex-module-decorators';
 import store from '../store';
-import { Article, NewArticle, NewComment, Comment, FavoriteTogglerMutation, UpdateArticle, DeleteArticle } from '../models';
+import {
+  Article,
+  NewArticle,
+  NewComment,
+  Comment,
+  FavoriteTogglerMutation,
+  UpdateArticle,
+  DeleteArticle,
+} from '../models';
 import articlesService from '../../service/articles';
 
 @Module({
@@ -24,12 +39,12 @@ class ArticlesModule extends VuexModule {
     updatedAt: new Date(),
     favorited: false,
     favoritesCount: 0,
-    author_id:  '',
+    author_id: '',
     author: {
-      _id:  '',
-      username:  '',
-      bio:  '',
-      image:  '',
+      _id: '',
+      username: '',
+      bio: '',
+      image: '',
       following: [],
     },
     comments: [],
@@ -47,13 +62,15 @@ class ArticlesModule extends VuexModule {
 
   @Mutation
   public addUpdatedArticle(article: Article) {
-    const index = this.globalFeed.findIndex( (block) => block._id === article._id );
+    const index = this.globalFeed.findIndex((block) => block._id === article._id);
     this.globalFeed.splice(index, 1);
     this.globalFeed = this.globalFeed.concat(article);
   }
   @Mutation
   public removeArticle(delInfo: DeleteArticle) {
-    const index = this.globalFeed.findIndex( (block) => block._id === delInfo.articleId );
+    const index = this.globalFeed.findIndex(
+      (block) => block._id === delInfo.articleId,
+    );
     this.globalFeed.splice(index, 1);
   }
   @Mutation
@@ -62,35 +79,37 @@ class ArticlesModule extends VuexModule {
   }
   @Mutation
   public changeFavoriteCount(mutationData: FavoriteTogglerMutation) {
-    const idx = this.globalFeed.findIndex( ( block ) => {
+    const idx = this.globalFeed.findIndex((block) => {
       return block._id === mutationData.articleId;
     });
     if (mutationData.mode === 'add') {
       this.singleArticle.favoritesCount = this.singleArticle.favoritesCount + 1;
-      this.globalFeed[idx].favoritesCount = this.globalFeed[idx].favoritesCount + 1;
+      this.globalFeed[idx].favoritesCount =
+        this.globalFeed[idx].favoritesCount + 1;
     } else {
       this.singleArticle.favoritesCount = this.singleArticle.favoritesCount - 1;
-      this.globalFeed[idx].favoritesCount = this.globalFeed[idx].favoritesCount - 1;
+      this.globalFeed[idx].favoritesCount =
+        this.globalFeed[idx].favoritesCount - 1;
     }
   }
 
-  @Action({commit: 'setGlobalFeed'})
+  @Action({ commit: 'setGlobalFeed' })
   public async refreshGlobalFeed(filter?: object) {
     const globalFeed = articlesService.getArticles(filter);
     return globalFeed;
   }
 
-  @Action({commit: 'addNewArticle'})
+  @Action({ commit: 'addNewArticle' })
   public async insertArticle(newArt: NewArticle) {
     const newArticle = articlesService.insertArticle(newArt);
     return newArticle;
   }
-  @Action({commit: 'addUpdatedArticle'})
+  @Action({ commit: 'addUpdatedArticle' })
   public async updateArticle(updArt: UpdateArticle) {
     const updatedArticle = articlesService.updateArticle(updArt);
     return updatedArticle;
   }
-  @Action({commit: 'removeArticle'})
+  @Action({ commit: 'removeArticle' })
   public async deleteArticle(delInfo: DeleteArticle) {
     articlesService.deleteArticle(delInfo);
     return delInfo;
@@ -101,7 +120,7 @@ class ArticlesModule extends VuexModule {
     const singleArticle = await articlesService.getSingleArticle(articleId);
     return { singleArticle };
   }
-  @Action({commit: 'addNewComment'})
+  @Action({ commit: 'addNewComment' })
   public async insertComment(newCom: NewComment) {
     const newComment = await articlesService.insertComment(newCom);
     return newComment.data;

@@ -2,14 +2,15 @@
   <button
     v-if="!isMyProfile"
     class="btn btn-sm btn-outline-secondary action-btn"
-    @click="followToggler(profileId, isFollow(profileId) ? 'delete':'add' )">
-      <i class="ion-plus-round"></i>
-      <template v-if="isFollow(profileId)">
-        Unfollow
-      </template>
-      <template v-else>
-        Follow
-      </template>
+    @click="followToggler(profileId, isFollow(profileId) ? 'delete' : 'add')"
+  >
+    <i class="ion-plus-round"></i>
+    <template v-if="isFollow(profileId)">
+      Unfollow
+    </template>
+    <template v-else>
+      Follow
+    </template>
   </button>
 </template>
 
@@ -19,8 +20,8 @@ import users from '../store/modules/users';
 import { FollowToggler } from '../store/models';
 @Component
 export default class Follow extends Vue {
- @Prop({required: true, default: ''})
- private profileId!: string;
+  @Prop({ required: true, default: '' })
+  private profileId!: string;
   get user() {
     return users.user;
   }
@@ -47,7 +48,7 @@ export default class Follow extends Vue {
   /**
    * isFollow
    */
-   public isFollow(profileId: string) {
+  public isFollow(profileId: string) {
     // TODO: Find a way to fix this
     // @ts-ignore
     if (this.user && this.user!.following.indexOf(profileId) !== -1) {
@@ -58,6 +59,4 @@ export default class Follow extends Vue {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

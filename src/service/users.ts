@@ -2,17 +2,17 @@ import axios from 'axios';
 import { User, Profile, FollowToggler, ProfileRequest } from '../store/models';
 let URL = 'http://localhost:5000/api/users/';
 if (process.env.NODE_ENV === 'production') {
-   URL = '/api/users/';
+  URL = '/api/users/';
 }
 class UserService {
   /**
    * updateUserInfo
    */
   public static async updateUserInfo(user: User) {
-    const response = await axios.put(URL, {
+    const response = await axios.put(URL + user._id, {
       user,
     });
-    return (response.data as User);
+    return response.data as User;
   }
   /**
    * loadProfile
@@ -24,7 +24,7 @@ class UserService {
         userId: payload.userId,
       },
     });
-    return (response.data as Profile);
+    return response.data as Profile;
   }
   /**
    * followToggler
@@ -40,16 +40,16 @@ class UserService {
   }
 
   private static async followAdd(payload: FollowToggler) {
-    const response =  await axios.post(URL + payload.profileId + '/follow', {
+    const response = await axios.post(URL + payload.profileId + '/follow', {
       id: payload.userId,
     });
-    return (response.data as Profile);
+    return response.data as Profile;
   }
   private static async followDelete(payload: FollowToggler) {
-    const response =  await axios.delete(URL + payload.profileId + '/follow', {
+    const response = await axios.delete(URL + payload.profileId + '/follow', {
       params: { id: payload.userId },
     });
-    return (response.data as Profile);
+    return response.data as Profile;
   }
 }
 export default UserService;

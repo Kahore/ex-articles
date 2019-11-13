@@ -1,39 +1,40 @@
 export interface User {
-    _id: string;
-    email: string;
-    username: string;
-    bio?: string;
-    image?: string;
-    following?: string[];
+  _id: string;
+  email: string;
+  username: string;
+  bio?: string;
+  image?: string;
+  following?: string[];
+  favorites?: string[];
 }
 export interface Profile {
-    _id: string;
-    username: string;
-    bio?: string;
-    image?: string;
-    following?: string[];
+  _id: string;
+  username: string;
+  bio?: string;
+  image?: string;
+  following?: string[];
 }
 export interface ProfileFilter {
-    author_id: string;
-    favorited?: string;
+  author_id: string;
+  favorited?: string;
 }
 export interface ProfileRequest {
-    profileId: string;
-    userId: string | null;
+  profileId: string;
+  userId: string | null;
 }
 export interface FollowToggler {
-    profileId: string;
-    userId: string;
-    mode: string;
+  profileId: string;
+  userId: string;
+  mode: string;
 }
 export interface FavoriteToggler {
-    articleId: string;
-    userId: string;
-    mode: string;
+  articleId: string;
+  userId: string;
+  mode: string;
 }
 export interface FavoriteTogglerMutation {
-    articleId: string;
-    mode: string;
+  articleId: string;
+  mode: string;
 }
 export interface UserSubmit {
   email: string;
@@ -45,43 +46,43 @@ export interface NewUser {
   password: string;
 }
 export interface Article {
-    _id: string;
-    title: string;
-    description: string;
-    body: string;
-    tagList: string[];
-    createdAt: Date;
-    updatedAt: Date;
-    favorited: boolean;
-    favoritesCount: number;
-    author_id: string;
-    author: Profile;
-    comments: Comment[];
+  _id: string;
+  title: string;
+  description: string;
+  body: string;
+  tagList: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  favorited: boolean;
+  favoritesCount: number;
+  author_id: string;
+  author: Profile;
+  comments: Comment[];
 }
 export interface Comment {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    body: string;
-    author: Profile;
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  body: string;
+  author: Profile;
 }
 export interface NewArticle {
-    title: string;
-    description: string;
-    body: string;
-    tagList: string[];
-    author_id: string;
+  title: string;
+  description: string;
+  body: string;
+  tagList: string[];
+  author_id: string;
 }
 export interface UpdateArticle extends NewArticle {
-    _id: string;
+  _id: string;
 }
 
 export interface DeleteArticle {
-    articleId: string;
-    userId: string;
+  articleId: string;
+  userId: string;
 }
 export interface NewComment {
-    body: string;
-    author_id: string;
-    article_id: string;
+  body: string;
+  author_id: string;
+  article_id: string;
 }

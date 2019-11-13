@@ -1,4 +1,9 @@
-import { VuexModule, Module, getModule, MutationAction} from 'vuex-module-decorators';
+import {
+  VuexModule,
+  Module,
+  getModule,
+  MutationAction,
+} from 'vuex-module-decorators';
 import store from '../store';
 import tagService from '../../service/tags';
 @Module({

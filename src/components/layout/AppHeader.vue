@@ -1,63 +1,42 @@
 <template>
   <nav class="navbar navbar-light navbar-expand-sm">
     <div class="container ">
-      <a
-        class="navbar-brand"
-        href="/">
+      <a class="navbar-brand" href="/">
         Logo name
       </a>
       <ul class="nav navbar-nav pull-xs-right">
         <li class="nav-item">
-          <router-link
-            class="nav-link"
-            to="/">
+          <router-link class="nav-link" to="/">
             Home
           </router-link>
         </li>
         <li v-if="username" class="nav-item">
-          <router-link
-            class="nav-link"
-            to="/editor">
+          <router-link class="nav-link" to="/editor">
             New Article
           </router-link>
         </li>
-        <li
-          v-if="username"
-          class="nav-item">
-          <router-link
-            class="nav-link"
-            to="/settings">
+        <li v-if="username" class="nav-item">
+          <router-link class="nav-link" to="/settings">
             Settings
           </router-link>
         </li>
         <li v-if="username" class="nav-item">
-          <router-link
-            class="nav-link"
-            :to="'/@' + userId">
+          <router-link class="nav-link" :to="'/@' + userId">
             {{ username }}
           </router-link>
         </li>
-        <li v-if="username" class="nav-item" >
-          <a
-            href=""
-            class="nav-link"
-            @click.prevent="logout">
+        <li v-if="username" class="nav-item">
+          <a href="" class="nav-link" @click.prevent="logout">
             Log out
           </a>
         </li>
         <li v-if="!username" class="nav-item">
-          <router-link
-            class="nav-link"
-            to="/register">
+          <router-link class="nav-link" to="/register">
             Sign up
           </router-link>
         </li>
-        <li
-          v-if="!username"
-          class="nav-item">
-          <router-link
-            link class="nav-link"
-            to="/login">
+        <li v-if="!username" class="nav-item">
+          <router-link link class="nav-link" to="/login">
             Sign in
           </router-link>
         </li>
@@ -69,7 +48,6 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import users from '../../store/modules/users';
-
 
 @Component
 export default class AppHeader extends Vue {

@@ -1,6 +1,21 @@
-import { VuexModule, Module, getModule, MutationAction, Mutation, Action} from 'vuex-module-decorators';
+import {
+  VuexModule,
+  Module,
+  getModule,
+  MutationAction,
+  Mutation,
+  Action,
+} from 'vuex-module-decorators';
 import store from '../store';
-import { User, Profile, UserSubmit, ProfileRequest, NewUser, FollowToggler, FavoriteToggler } from '../models';
+import {
+  User,
+  Profile,
+  UserSubmit,
+  ProfileRequest,
+  NewUser,
+  FollowToggler,
+  FavoriteToggler,
+} from '../models';
 import authService from '../../service/auth';
 import usersService from '../../service/users';
 import articleService from '../../service/articles';
@@ -20,7 +35,7 @@ class UserModule extends VuexModule {
     following: [],
   };
   public profile: Profile | null = null;
-
+  public errorMsg: string = '';
   public get username(): string | null {
     return (this.user && this.user.username) || null;
   }
@@ -28,6 +43,9 @@ class UserModule extends VuexModule {
     return (this.user && this.user._id) || '';
   }
 
+  public get getErrorMsg(): string {
+    return this.errorMsg;
+  }
   @Mutation
   public setLocalAuth(user: User): void {
     this.user = user;
@@ -46,9 +64,9 @@ class UserModule extends VuexModule {
   }
   @Mutation
   public resetProfile(): void {
-     this.profile = null;
+    this.profile = null;
   }
-  @Action({commit: 'setLocalAuth'})
+  @Action({ commit: 'setLocalAuth' })
   public localAuth() {
     const userLocal: string | null = localStorage.getItem('user_auth');
     if (userLocal !== null) {
@@ -56,11 +74,18 @@ class UserModule extends VuexModule {
       return user;
     }
   }
-
+  // @ts-ignore
+  @MutationAction
+  public setError(errMsg: string) {
+    const errorMsg: string = errMsg;
+    return { errorMsg };
+  }
   @MutationAction
   public async login(userSubmit: UserSubmit) {
     const user = await authService.loginUser(userSubmit);
-    localStorage.setItem('user_auth', JSON.stringify(user));
+    if (typeof user !== 'undefined') {
+      localStorage.setItem('user_auth', JSON.stringify(user));
+    }
     return { user };
   }
   @MutationAction

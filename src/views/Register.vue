@@ -2,11 +2,13 @@
   <div class="auth-page">
     <div class="container page">
       <div class="row">
-
         <div class="col-md-6 offset-md-3 col-xs-12">
           <h1 class="text-xs-center">Sign up</h1>
           <p class="text-xs-center">
-            <a href="">Have an account?</a>
+            <router-link to="/login">
+              Have an account?
+            </router-link>
+            <a href=""></a>
           </p>
 
           <ul class="error-messages" v-if="error">
@@ -19,37 +21,41 @@
                 class="form-control form-control-lg"
                 type="text"
                 placeholder="Your Name"
-                v-model="newUser.username">
+                v-model="newUser.username"
+              />
             </fieldset>
             <fieldset class="form-group">
               <input
                 class="form-control form-control-lg"
                 type="text"
                 placeholder="Email"
-                v-model="newUser.email">
+                v-model="newUser.email"
+              />
             </fieldset>
             <fieldset class="form-group">
               <input
                 class="form-control form-control-lg"
                 type="password"
                 placeholder="Password"
-                v-model="newUser.password">
+                v-model="newUser.password"
+              />
             </fieldset>
             <fieldset class="form-group">
               <input
                 class="form-control form-control-lg"
                 type="password"
                 placeholder="Repeat password"
-                v-model="repeatPassword">
+                v-model="repeatPassword"
+              />
             </fieldset>
             <button
               class="btn btn-lg btn-primary pull-xs-right"
-              @click.prevent="registerUser">
+              @click.prevent="registerUser"
+            >
               Sign up
             </button>
           </form>
         </div>
-
       </div>
     </div>
   </div>
@@ -74,14 +80,14 @@ export default class Register extends Vue {
    */
   public registerUser() {
     users
-    .register(this.newUser)
-    .then(() => {
-      this.$router.push('/');
-      this._resetRegisterForm();
-    })
-    .catch((err) => {
-      this.error = 'Invalid username or password';
-    });
+      .register(this.newUser)
+      .then(() => {
+        this.$router.push('/');
+        this._resetRegisterForm();
+      })
+      .catch((err) => {
+        this.error = 'Invalid username or password';
+      });
   }
   private _resetRegisterForm(): void {
     this.newUser = {
@@ -93,6 +99,4 @@ export default class Register extends Vue {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
