@@ -1,5 +1,5 @@
 # Simple article portal
-This is a frontend part of app
+This is a frontend part of app.
 
 [See it live!](https://ancient-island-54893.herokuapp.com/)
 
@@ -12,7 +12,8 @@ Frontend is built with
 - [vuelidate](https://github.com/vuelidate/vuelidate)
 - [typescript](https://www.typescriptlang.org/)
 
- For demo I already create several account, so you you can login to see how it all works
+ For demo I already create several account, so you you can login to see how it all works.
+ 
  Reading article ok w/t login, but other stuffs required auth.
  
 | Login                  | Password              |
