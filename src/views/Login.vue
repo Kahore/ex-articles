@@ -15,21 +15,36 @@
           </ul>
 
           <form>
-            <fieldset class="form-group">
+            <fieldset
+              class="form-group"
+              :class="{ 'form-group--error': $v.email.$error }"
+            >
               <input
                 class="form-control form-control-lg"
                 type="text"
                 placeholder="Email"
                 v-model="email"
               />
+              <div class="form-group__message--error" v-if="!$v.email.required">
+                Email is required
+              </div>
             </fieldset>
-            <fieldset class="form-group">
+            <fieldset
+              class="form-group"
+              :class="{ 'form-group--error': $v.password.$error }"
+            >
               <input
                 class="form-control form-control-lg"
                 type="password"
                 placeholder="Password"
                 v-model="password"
               />
+              <div
+                class="form-group__message--error"
+                v-if="!$v.password.required"
+              >
+                Password is required
+              </div>
             </fieldset>
             <button
               class="btn btn-lg btn-primary pull-xs-right"
@@ -47,7 +62,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import users from '../store/modules/users';
-
+import { required } from 'vuelidate/lib/validators';
 @Component
 export default class Login extends Vue {
   public email: string = '';
@@ -55,19 +70,32 @@ export default class Login extends Vue {
   public error: string = '';
 
   public async login() {
-    users.setError('');
-    await users.login({
-      email: this.email,
-      password: this.password,
-    });
-    if (this.errorMsg === '') {
-      this.$router.push('/');
+    // @ts-ignore
+    this.$v.$touch();
+    // @ts-ignore
+    if (!this.$v.$invalid) {
+      users.setError('');
+      await users.login({
+        email: this.email,
+        password: this.password,
+      });
+      if (this.errorMsg === '') {
+        this.$router.push('/');
+      }
     }
   }
   get errorMsg() {
     return users.getErrorMsg;
   }
+  private validations() {
+    return {
+      email: {
+        required,
+      },
+      password: {
+        required,
+      },
+    };
+  }
 }
 </script>
-
-<style scoped></style>

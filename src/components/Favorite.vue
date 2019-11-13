@@ -37,11 +37,11 @@ export default class Favorite extends Vue {
   public isFavorite(articleId: string): boolean {
     // TODO: Find a way to fix this
     // @ts-ignore
-    if (
-      this.user.favorites &&
-      this.user!.favorites.indexOf(this.articleId) !== -1
-    ) {
-      return true;
+    if (typeof this.user !== 'undefined') {
+      // @ts-ignore
+      if (this.user!.favorites.indexOf(this.articleId) !== -1) {
+        return true;
+      }
     }
     return false;
   }

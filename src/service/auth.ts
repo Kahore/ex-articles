@@ -19,7 +19,14 @@ class AuthService {
       });
       return response.data as User;
     } catch (error) {
-      users.setError(error);
+      if (
+        error.name + ': ' + error.message ===
+        'Error: Request failed with status code 401'
+      ) {
+        users.setError('Invalid username or password');
+      } else {
+        users.setError(error);
+      }
       return error;
     }
   }
